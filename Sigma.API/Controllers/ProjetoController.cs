@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Sigma.Application.Dtos;
 using Sigma.Application.Interfaces;
 using Sigma.Domain.Dtos;
@@ -17,6 +18,7 @@ namespace Sigma.API.Controllers
             _projetoService = projetoService;
         }
 
+        [Authorize]
         [HttpPost("inserir")]
         public async Task<IActionResult> Inserir([FromBody] ProjetoNovoDto model)
         {
@@ -24,6 +26,7 @@ namespace Sigma.API.Controllers
             return result ? Ok() : BadRequest();
         }
 
+        [Authorize]
         [HttpPut("alterar")]
         public async Task<IActionResult> Alterar([FromBody] ProjetoUpdateDto model)
         {
@@ -38,6 +41,7 @@ namespace Sigma.API.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("excluir/{id:long}")]
         public async Task<IActionResult> Excluir(long id)
         {
@@ -52,6 +56,7 @@ namespace Sigma.API.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("buscar")]
         public async Task<IActionResult> Buscar([FromQuery] string? nome, [FromQuery] StatusProjeto? status)
         {
@@ -59,6 +64,7 @@ namespace Sigma.API.Controllers
             return Ok(projetos);
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> BuscarTodos()
         {
