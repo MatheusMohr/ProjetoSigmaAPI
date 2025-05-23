@@ -66,6 +66,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 // Use CORS antes da autenticação e autorização
 app.UseCors("AllowAllOrigins");

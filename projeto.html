@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <title>Projetos</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <h1>Projetos</h1>
+    <button id="logoutBtn">Sair</button>
+
+    <h2>Lista de Projetos</h2>
+    <button id="loadProjectsBtn">Carregar Projetos</button>
+    <ul id="projectsList"></ul>
+
+    <h2>Adicionar Projeto</h2>
+    <form id="addProjectForm">
+        <input type="text" id="projectName" placeholder="Nome" required />
+        <textarea id="projectDescription" placeholder="Descrição" required></textarea>
+        <button type="submit">Adicionar</button>
+    </form>
+
+    <script src="app.js"></script>
+</body>
+</html>

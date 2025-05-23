@@ -1,0 +1,134 @@
+﻿/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: #333;
+}
+
+.container {
+    max-width: 720px;
+    margin: 40px auto;
+    background: white;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    height: 80vh;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+    /* Scrollbar estilizado (Webkit-based browsers) */
+    .container::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .container::-webkit-scrollbar-thumb {
+        background: #6a11cb;
+        border-radius: 10px;
+        transition: background 0.3s;
+    }
+
+        .container::-webkit-scrollbar-thumb:hover {
+            background: #2575fc;
+        }
+
+/* Cabeçalhos */
+h1, h2 {
+    margin-bottom: 20px;
+    color: #222;
+}
+
+/* Formulários e Inputs */
+form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+
+input, textarea, select {
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1.5px solid #ddd;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+    input:focus, textarea:focus, select:focus {
+        border-color: #6a11cb;
+        outline: none;
+    }
+
+/* Botões */
+button {
+    background: #6a11cb;
+    color: white;
+    font-weight: 600;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+    align-self: flex-start;
+}
+
+    button:hover {
+        background: #2575fc;
+    }
+
+/* Lista de projetos */
+ul {
+    list-style: none;
+    padding-left: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    background: #fafafa;
+}
+
+    ul li {
+        padding: 12px 15px;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 500;
+    }
+
+        ul li:last-child {
+            border-bottom: none;
+        }
+
+        ul li button {
+            background: #e74c3c;
+            padding: 6px 12px;
+            font-size: 0.9rem;
+            border-radius: 6px;
+        }
+
+            ul li button:hover {
+                background: #c0392b;
+            }
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .container {
+        margin: 20px 10px;
+        padding: 20px;
+        height: 90vh;
+    }
+}

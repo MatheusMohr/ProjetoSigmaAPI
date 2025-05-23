@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <title>Gerenciar Projetos</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Projetos</h1>
+            <button id="logoutBtn">Sair</button>
+        </header>
+
+        <section>
+            <h2>Buscar Projetos</h2>
+            <form id="searchForm">
+                <input type="text" id="searchNome" placeholder="Nome do projeto" />
+                <select id="searchStatus">
+                    <option value="">Todos os status</option>
+                    <option value="EmAnalise">Em Análise</option>
+                    <option value="AnaliseRealizada">Análise Realizada</option>
+                    <option value="AnaliseAprovada">Análise Aprovada</option>
+                    <option value="Iniciado">Iniciado</option>
+                    <option value="Planejado">Planejado</option>
+                    <option value="EmAndamento">Em Andamento</option>
+                    <option value="Encerrado">Encerrado</option>
+                    <option value="Cancelado">Cancelado</option>
+                </select>
+                <button type="submit">Buscar</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Lista de Projetos</h2>
+            <ul id="projectsList"></ul>
+        </section>
+
+        <section>
+            <h2>Adicionar Projeto</h2>
+            <form id="addProjectForm">
+                <input type="text" id="projectNome" placeholder="Nome" required />
+                <textarea id="projectDescricao" placeholder="Descrição" required></textarea>
+                <label>Data de Início:</label>
+                <input type="date" id="projectDataInicio" required />
+                <label>Previsão de Término:</label>
+                <input type="date" id="projectPrevisaoTermino" required />
+                <label>Orçamento Total:</label>
+                <input type="number" step="0.01" id="projectOrcamento" placeholder="R$" required />
+                <label>Classificação de Risco:</label>
+                <select id="projectClassificacaoRisco" required>
+                    <option value="">Selecione</option>
+                    <option value="Baixo">Baixo</option>
+                    <option value="Medio">Médio</option>
+                    <option value="Alto">Alto</option>
+                </select>
+                <button type="submit">Adicionar</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Alterar Projeto</h2>
+            <form id="updateProjectForm">
+                <input type="number" id="updateProjectId" placeholder="ID do projeto" required />
+                <input type="text" id="updateProjectNome" placeholder="Nome" required />
+                <textarea id="updateProjectDescricao" placeholder="Descrição" required></textarea>
+                <label>Data de Início:</label>
+                <input type="date" id="updateProjectDataInicio" required />
+                <label>Previsão de Término:</label>
+                <input type="date" id="updateProjectPrevisaoTermino" required />
+                <label>Orçamento Total:</label>
+                <input type="number" step="0.01" id="updateProjectOrcamento" placeholder="R$" required />
+                <label>Classificação de Risco:</label>
+                <select id="updateProjectClassificacaoRisco" required>
+                    <option value="">Selecione</option>
+                    <option value="Baixo">Baixo</option>
+                    <option value="Medio">Médio</option>
+                    <option value="Alto">Alto</option>
+                </select>
+                <button type="submit">Alterar</button>
+            </form>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
