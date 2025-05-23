@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Gerenciar Projetos</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
     <div class="container">
@@ -42,9 +42,9 @@
                 <input type="text" id="projectNome" placeholder="Nome" required />
                 <textarea id="projectDescricao" placeholder="Descrição" required></textarea>
                 <label>Data de Início:</label>
-                <input type="date" id="projectDataInicio" required />
+                <input type="datetime-local" id="projectDataInicio" required />
                 <label>Previsão de Término:</label>
-                <input type="date" id="projectPrevisaoTermino" required />
+                <input type="datetime-local" id="projectPrevisaoTermino" required />
                 <label>Orçamento Total:</label>
                 <input type="number" step="0.01" id="projectOrcamento" placeholder="R$" required />
                 <label>Classificação de Risco:</label>
@@ -65,9 +65,9 @@
                 <input type="text" id="updateProjectNome" placeholder="Nome" required />
                 <textarea id="updateProjectDescricao" placeholder="Descrição" required></textarea>
                 <label>Data de Início:</label>
-                <input type="date" id="updateProjectDataInicio" required />
+                <input type="datetime-local" id="updateProjectDataInicio" required />
                 <label>Previsão de Término:</label>
-                <input type="date" id="updateProjectPrevisaoTermino" required />
+                <input type="datetime-local" id="updateProjectPrevisaoTermino" required />
                 <label>Orçamento Total:</label>
                 <input type="number" step="0.01" id="updateProjectOrcamento" placeholder="R$" required />
                 <label>Classificação de Risco:</label>

@@ -56,7 +56,12 @@ function renderProjects(projetos) {
 
     projetos.forEach(proj => {
         const li = document.createElement('li');
-        li.textContent = `${proj.nome} - Status: ${proj.status}`;
+
+        // Formatando datas para exibição amigável
+        const dataInicio = new Date(proj.dataInicio).toLocaleString();
+        const previsaoTermino = new Date(proj.previsaoTermino).toLocaleString();
+
+        li.textContent = `${proj.nome} - Status: ${proj.status} - Início: ${dataInicio} - Previsão Término: ${previsaoTermino}`;
 
         // Botão excluir
         const btnExcluir = document.createElement('button');
@@ -100,8 +105,8 @@ document.getElementById('addProjectForm')?.addEventListener('submit', async e =>
     const novoProjeto = {
         nome: document.getElementById('projectNome').value.trim(),
         descricao: document.getElementById('projectDescricao').value.trim(),
-        dataInicio: document.getElementById('projectDataInicio').value,
-        previsaoTermino: document.getElementById('projectPrevisaoTermino').value,
+        dataInicio: new Date(document.getElementById('projectDataInicio').value).toISOString(),
+        previsaoTermino: new Date(document.getElementById('projectPrevisaoTermino').value).toISOString(),
         orcamentoTotal: parseFloat(document.getElementById('projectOrcamento').value),
         classificacaoDeRisco: document.getElementById('projectClassificacaoRisco').value,
     };
@@ -113,7 +118,7 @@ document.getElementById('addProjectForm')?.addEventListener('submit', async e =>
                 'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + token,
             },
-            body: JSON.stringify(novoProjeto),
+            body: JSON.stringify({ model: novoProjeto }), // Envolvendo em "model"
         });
 
         if (!res.ok) {
@@ -143,8 +148,8 @@ document.getElementById('updateProjectForm')?.addEventListener('submit', async e
         id: parseInt(document.getElementById('updateProjectId').value),
         nome: document.getElementById('updateProjectNome').value.trim(),
         descricao: document.getElementById('updateProjectDescricao').value.trim(),
-        dataInicio: document.getElementById('updateProjectDataInicio').value,
-        previsaoTermino: document.getElementById('updateProjectPrevisaoTermino').value,
+        dataInicio: new Date(document.getElementById('updateProjectDataInicio').value).toISOString(),
+        previsaoTermino: new Date(document.getElementById('updateProjectPrevisaoTermino').value).toISOString(),
         orcamentoTotal: parseFloat(document.getElementById('updateProjectOrcamento').value),
         classificacaoDeRisco: document.getElementById('updateProjectClassificacaoRisco').value,
     };
@@ -156,7 +161,7 @@ document.getElementById('updateProjectForm')?.addEventListener('submit', async e
                 'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + token,
             },
-            body: JSON.stringify(projetoAlterado),
+            body: JSON.stringify({ model: projetoAlterado }), // Envolvendo em "model"
         });
 
         if (!res.ok) {

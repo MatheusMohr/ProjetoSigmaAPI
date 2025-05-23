@@ -17,7 +17,6 @@ namespace Sigma.API.Controllers
             _authService = authService;
         }
 
-        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto login)
         {

@@ -31,28 +31,28 @@ namespace Sigma.Infra.Data.Repositories
 
         public async Task<bool> Excluir(long id)
         {
-            var projeto = await _dbContext.Projetos.FindAsync(id);
+            var projeto = await _dbContext.Projeto.FindAsync(id);
             if (projeto == null)
                 return false;
 
-            _dbContext.Projetos.Remove(projeto);
+            _dbContext.Projeto.Remove(projeto);
             await _dbContext.SaveChangesAsync();
             return true;
         }
 
         public async Task<List<Projeto>> BuscarTodos()
         {
-            return await _dbContext.Projetos.ToListAsync();
+            return await _dbContext.Projeto.ToListAsync();
         }
 
         public async Task<Projeto> BuscarPorId(long id)
         {
-            return await _dbContext.Projetos.FindAsync(id);
+            return await _dbContext.Projeto.FindAsync(id);
         }
 
         public async Task<List<Projeto>> BuscarPorFiltro(string? nome, StatusProjeto? status)
         {
-            var query = _dbContext.Projetos.AsQueryable();
+            var query = _dbContext.Projeto.AsQueryable();
 
             if (!string.IsNullOrEmpty(nome))
                 query = query.Where(p => p.Nome.Contains(nome));
