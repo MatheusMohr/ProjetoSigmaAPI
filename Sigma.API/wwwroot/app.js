@@ -32,10 +32,17 @@ document.getElementById('logoutBtn')?.addEventListener('click', () => {
 // --- BUSCAR PROJETOS ---
 document.getElementById('searchForm')?.addEventListener('submit', async e => {
     e.preventDefault();
-    const nome = document.getElementById('searchNome').value.trim();
-    const status = document.getElementById('searchStatus').value;
+    await carregarProjetos();
+});
 
+// Função para buscar e renderizar projetos
+async function carregarProjetos() {
+    const id = document.getElementById('searchId')?.value.trim() || '';
+    const nome = document.getElementById('searchNome')?.value.trim() || '';
+    const status = document.getElementById('searchStatus')?.value || '';
     let url = `${apiBaseUrl}/projeto/buscar?`;
+
+    if (id) url += `id=${encodeURIComponent(id)}&`;
     if (nome) url += `nome=${encodeURIComponent(nome)}&`;
     if (status) url += `status=${encodeURIComponent(status)}`;
 
@@ -47,7 +54,7 @@ document.getElementById('searchForm')?.addEventListener('submit', async e => {
     } catch (err) {
         alert(err.message);
     }
-});
+}
 
 // --- RENDERIZA PROJETOS ---
 function renderProjects(projetos) {
@@ -57,15 +64,14 @@ function renderProjects(projetos) {
     projetos.forEach(proj => {
         const li = document.createElement('li');
 
-        // Formatando datas para exibição amigável
         const dataInicio = new Date(proj.dataInicio).toLocaleString();
         const previsaoTermino = new Date(proj.previsaoTermino).toLocaleString();
 
-        li.textContent = `${proj.nome} - Status: ${proj.status} - Início: ${dataInicio} - Previsão Término: ${previsaoTermino}`;
+        li.textContent = `ID: ${proj.id} | ${proj.nome} - Status: ${proj.status} - Inicio: ${dataInicio} - Previsao Termino: ${previsaoTermino}`;
 
-        // Botão excluir
         const btnExcluir = document.createElement('button');
         btnExcluir.textContent = 'Excluir';
+        btnExcluir.classList.add('btn');
         btnExcluir.onclick = async () => {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -81,13 +87,22 @@ function renderProjects(projetos) {
                 });
                 if (!res.ok) throw new Error('Erro ao excluir projeto');
                 alert('Projeto excluído com sucesso!');
-                document.getElementById('searchForm').dispatchEvent(new Event('submit'));
+                carregarProjetos();
             } catch (err) {
                 alert(err.message);
             }
         };
 
+        const btnEditar = document.createElement('button');
+        btnEditar.textContent = 'Editar';
+        btnEditar.classList.add('btn');
+        btnEditar.onclick = () => {
+            carregarProjetoParaAlterar(proj.id);
+            window.scrollTo(0, document.getElementById('updateProjectForm').offsetTop);
+        };
+
         li.appendChild(btnExcluir);
+        li.appendChild(btnEditar);
         ul.appendChild(li);
     });
 }
@@ -95,6 +110,7 @@ function renderProjects(projetos) {
 // --- ADICIONAR PROJETO ---
 document.getElementById('addProjectForm')?.addEventListener('submit', async e => {
     e.preventDefault();
+
     const token = localStorage.getItem('token');
     if (!token) {
         alert('Você precisa estar logado para adicionar projetos.');
@@ -108,7 +124,7 @@ document.getElementById('addProjectForm')?.addEventListener('submit', async e =>
         dataInicio: new Date(document.getElementById('projectDataInicio').value).toISOString(),
         previsaoTermino: new Date(document.getElementById('projectPrevisaoTermino').value).toISOString(),
         orcamentoTotal: parseFloat(document.getElementById('projectOrcamento').value),
-        classificacaoDeRisco: document.getElementById('projectClassificacaoRisco').value,
+        classificacaoRisco: document.getElementById('projectClassificacaoRisco').value,
     };
 
     try {
@@ -118,7 +134,7 @@ document.getElementById('addProjectForm')?.addEventListener('submit', async e =>
                 'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + token,
             },
-            body: JSON.stringify({ model: novoProjeto }), // Envolvendo em "model"
+            body: JSON.stringify(novoProjeto),
         });
 
         if (!res.ok) {
@@ -127,8 +143,8 @@ document.getElementById('addProjectForm')?.addEventListener('submit', async e =>
         }
 
         alert('Projeto adicionado com sucesso!');
-        document.getElementById('addProjectForm').reset();
-        document.getElementById('searchForm').dispatchEvent(new Event('submit'));
+        e.target.reset();
+        carregarProjetos();
     } catch (err) {
         alert(err.message);
     }
@@ -137,6 +153,7 @@ document.getElementById('addProjectForm')?.addEventListener('submit', async e =>
 // --- ALTERAR PROJETO ---
 document.getElementById('updateProjectForm')?.addEventListener('submit', async e => {
     e.preventDefault();
+
     const token = localStorage.getItem('token');
     if (!token) {
         alert('Você precisa estar logado para alterar projetos.');
@@ -151,7 +168,8 @@ document.getElementById('updateProjectForm')?.addEventListener('submit', async e
         dataInicio: new Date(document.getElementById('updateProjectDataInicio').value).toISOString(),
         previsaoTermino: new Date(document.getElementById('updateProjectPrevisaoTermino').value).toISOString(),
         orcamentoTotal: parseFloat(document.getElementById('updateProjectOrcamento').value),
-        classificacaoDeRisco: document.getElementById('updateProjectClassificacaoRisco').value,
+        classificacaoRisco: document.getElementById('updateProjectClassificacaoRisco').value,
+        status: document.getElementById('updateProjectStatus').value,
     };
 
     try {
@@ -161,7 +179,7 @@ document.getElementById('updateProjectForm')?.addEventListener('submit', async e
                 'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + token,
             },
-            body: JSON.stringify({ model: projetoAlterado }), // Envolvendo em "model"
+            body: JSON.stringify(projetoAlterado),
         });
 
         if (!res.ok) {
@@ -170,9 +188,46 @@ document.getElementById('updateProjectForm')?.addEventListener('submit', async e
         }
 
         alert('Projeto alterado com sucesso!');
-        document.getElementById('updateProjectForm').reset();
-        document.getElementById('searchForm').dispatchEvent(new Event('submit'));
+        e.target.reset();
+        carregarProjetos();
     } catch (err) {
         alert(err.message);
     }
 });
+
+// --- CARREGAR PROJETO PARA ALTERAÇÃO ---
+async function carregarProjetoParaAlterar(idProjeto) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Você precisa estar logado.');
+        window.location.href = 'index.html';
+        return;
+    }
+
+    try {
+        const res = await fetch(`${apiBaseUrl}/projeto/${idProjeto}`, {
+            headers: {
+                Authorization: 'Bearer ' + token,
+            },
+        });
+
+        if (!res.ok) throw new Error('Projeto não encontrado.');
+        const proj = await res.json(); 
+
+        document.getElementById('updateProjectId').value = proj.id;
+        document.getElementById('updateProjectNome').value = proj.nome;
+        document.getElementById('updateProjectDescricao').value = proj.descricao;
+        document.getElementById('updateProjectDataInicio').value = proj.dataInicio ? proj.dataInicio.substring(0, 16) : '';
+        document.getElementById('updateProjectPrevisaoTermino').value = proj.previsaoTermino ? proj.previsaoTermino.substring(0, 16) : '';
+        document.getElementById('updateProjectOrcamento').value = proj.orcamentoTotal || '';
+        document.getElementById('updateProjectClassificacaoRisco').value = proj.classificacaoRisco || '';
+        document.getElementById('updateProjectStatus').value = proj.status || '';
+    } catch (err) {
+        alert(err.message);
+    }
+}
+
+// --- Inicializa a lista de projetos ao carregar a página, se o elemento existir ---
+if (document.getElementById('projectsList')) {
+    carregarProjetos();
+}

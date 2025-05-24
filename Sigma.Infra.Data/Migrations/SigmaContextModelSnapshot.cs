@@ -64,9 +64,9 @@ namespace Sigma.Infra.Data.Migrations
                         .HasColumnName("status");
 
                     b.HasKey("Id")
-                        .HasName("pk_projetos");
+                        .HasName("pk_projeto");
 
-                    b.ToTable("projetos");
+                    b.ToTable("projeto");
                 });
 #pragma warning restore 612, 618
         }

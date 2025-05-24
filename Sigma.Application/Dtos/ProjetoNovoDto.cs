@@ -10,6 +10,6 @@ namespace Sigma.Domain.Dtos
         public DateTime PrevisaoTermino { get; set; }
         public DateTime? DataTerminoReal { get; set; }
         public decimal OrcamentoTotal { get; set; }
-        public ClassificaçãoDeRisco ClassificacaoRisco { get; set; }
+        public ClassificacaoDeRisco ClassificacaoRisco { get; set; }
     }
 }

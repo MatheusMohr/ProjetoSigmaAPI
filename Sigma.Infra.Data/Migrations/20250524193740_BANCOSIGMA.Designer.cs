@@ -12,8 +12,8 @@ using Sigma.Infra.Data.Context;
 namespace Sigma.Infra.Data.Migrations
 {
     [DbContext(typeof(SigmaContext))]
-    [Migration("20250523223436_Banco")]
-    partial class Banco
+    [Migration("20250524193740_BANCOSIGMA")]
+    partial class BANCOSIGMA
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

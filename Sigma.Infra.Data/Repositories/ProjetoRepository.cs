@@ -3,6 +3,9 @@ using Sigma.Domain.Entities;
 using Sigma.Domain.Enums;
 using Sigma.Domain.Interfaces.Repositories;
 using Sigma.Infra.Data.Context;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Sigma.Infra.Data.Repositories
 {
@@ -17,9 +20,9 @@ namespace Sigma.Infra.Data.Repositories
 
         public async Task<bool> Inserir(Projeto entidade)
         {
-           await _dbContext.Set<Projeto>().AddAsync(entidade);
-           await _dbContext.SaveChangesAsync();
-           return true;
+            await _dbContext.Set<Projeto>().AddAsync(entidade);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> Atualizar(Projeto entidade)
@@ -45,7 +48,7 @@ namespace Sigma.Infra.Data.Repositories
             return await _dbContext.Projeto.ToListAsync();
         }
 
-        public async Task<Projeto> BuscarPorId(long id)
+        public async Task<Projeto?> BuscarPorId(long id)
         {
             return await _dbContext.Projeto.FindAsync(id);
         }

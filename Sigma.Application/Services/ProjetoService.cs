@@ -5,6 +5,9 @@ using Sigma.Domain.Dtos;
 using Sigma.Domain.Entities;
 using Sigma.Domain.Enums;
 using Sigma.Domain.Interfaces.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Sigma.Application.Services
 {
@@ -30,17 +33,17 @@ namespace Sigma.Application.Services
         public async Task<bool> Inserir(ProjetoNovoDto model)
         {
             var projeto = _mapper.Map<Projeto>(model);
-            projeto.Status = StatusProjeto.EmAnalise; // Define status inicial, por exemplo
+            projeto.Status = StatusProjeto.EmAnalise; // status inicial padrão
             return await _projetoRepository.Inserir(projeto);
         }
 
-        public async Task<bool> Atualizar(ProjetoUpdateDto model)
+        public async Task<bool> Atualizar(ProjetosDto model)
         {
             var projetoExistente = await _projetoRepository.BuscarPorId(model.Id);
             if (projetoExistente == null)
                 throw new Exception("Projeto não encontrado");
 
-            var projetoAtualizado = _mapper.Map<ProjetoUpdateDto, Projeto>(model, projetoExistente);
+            var projetoAtualizado = _mapper.Map<ProjetosDto, Projeto>(model, projetoExistente);
 
             return await _projetoRepository.Atualizar(projetoAtualizado);
         }
@@ -67,6 +70,15 @@ namespace Sigma.Application.Services
         {
             var projetos = await _projetoRepository.BuscarPorFiltro(nome, status);
             return _mapper.Map<List<ProjetosDto>>(projetos);
+        }
+
+        public async Task<ProjetosDto?> ObterPorId(long id)
+        {
+            var entity = await _projetoRepository.BuscarPorId(id);
+            if (entity == null)
+                return null;
+
+            return _mapper.Map<ProjetosDto>(entity);
         }
     }
 }

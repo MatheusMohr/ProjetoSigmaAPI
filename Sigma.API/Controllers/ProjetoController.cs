@@ -17,6 +17,7 @@ namespace Sigma.API.Controllers
         {
             _projetoService = projetoService;
         }
+
         [HttpPost("inserir")]
         public async Task<IActionResult> Inserir([FromBody] ProjetoNovoDto model)
         {
@@ -25,7 +26,7 @@ namespace Sigma.API.Controllers
         }
 
         [HttpPut("alterar")]
-        public async Task<IActionResult> Alterar([FromBody] ProjetoUpdateDto model)
+        public async Task<IActionResult> Alterar([FromBody] ProjetosDto model)
         {
             try
             {
@@ -65,5 +66,16 @@ namespace Sigma.API.Controllers
             var projetos = await _projetoService.BuscarTodos();
             return Ok(projetos);
         }
+
+        [HttpGet("{id:long}")]
+        public async Task<IActionResult> ObterPorId(long id)
+        {
+            var projeto = await _projetoService.ObterPorId(id);
+            if (projeto == null)
+                return NotFound("Projeto não encontrado");
+            return Ok(projeto);
+        }
     }
+
 }
+

@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Sigma.Infra.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Banco : Migration
+    public partial class BANCOSIGMA : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
