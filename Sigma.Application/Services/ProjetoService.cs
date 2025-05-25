@@ -23,7 +23,6 @@ namespace Sigma.Application.Services
             StatusProjeto.EmAndamento,
             StatusProjeto.Encerrado
         };
-
         public ProjetoService(IMapper mapper, IProjetoRepository projetoRepository)
         {
             _mapper = mapper;
@@ -33,7 +32,7 @@ namespace Sigma.Application.Services
         public async Task<bool> Inserir(ProjetoNovoDto model)
         {
             var projeto = _mapper.Map<Projeto>(model);
-            projeto.Status = StatusProjeto.EmAnalise; // status inicial padrão
+            projeto.Status = StatusProjeto.EmAnalise;
             return await _projetoRepository.Inserir(projeto);
         }
 
@@ -54,7 +53,7 @@ namespace Sigma.Application.Services
             if (projeto == null)
                 throw new Exception("Projeto não encontrado");
 
-            if (Array.Exists(StatusRestritosExclusao, s => s == projeto.Status))
+            if (StatusRestritosExclusao.Contains(projeto.Status))
                 throw new Exception($"Exclusão não permitida para projetos com status '{projeto.Status}'");
 
             return await _projetoRepository.Excluir(id);

@@ -79,6 +79,12 @@ app.UseStaticFiles();
 // Use CORS antes da autenticação e autorização
 app.UseCors("AllowAllOrigins");
 
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+    await next.Invoke();
+});
+
 app.UseAuthentication();
 
 app.UseAuthorization();

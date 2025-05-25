@@ -3,16 +3,42 @@
 <head>
     <meta charset="UTF-8" />
     <title>Login - Gerenciamento de Projetos</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="index.css" />
 </head>
 <body>
-    <h1>Login</h1>
-    <form id="loginForm">
-        <input type="text" id="username" placeholder="Usuário" required />
-        <input type="password" id="password" placeholder="Senha" required />
-        <button type="submit">Entrar</button>
-    </form>
+    <div class="main-wrapper">
+        <section class="login-container">
+            <h1>Login</h1>
+            <form id="loginForm">
+                <input type="text" id="username" name="username" placeholder="Usuário" required />
+                <input type="password" id="password" name="password" placeholder="Senha" required />
+                <button type="submit">Entrar</button>
+            </form>
+        </section>
 
-    <script src="app.js"></script>
+        <section class="public-search-container">
+            <h2>Buscar Projetos (Público)</h2>
+            <form id="publicSearchForm">
+                <input type="text" id="publicSearchId" name="publicSearchId" placeholder="ID do projeto" />
+                <input type="text" id="publicSearchNome" name="publicSearchNome" placeholder="Nome do projeto" />
+                <select id="publicSearchStatus" name="publicSearchStatus">
+                    <option value="">--Selecione o Status--</option>
+                    <option value="emAnalise">Em análise</option>
+                    <option value="analiseRealizada">Análise realizada</option>
+                    <option value="analiseAprovada">Análise aprovada</option>
+                    <option value="iniciado">Iniciado</option>
+                    <option value="planejado">Planejado</option>
+                    <option value="emAndamento">Em andamento</option>
+                    <option value="encerrado">Encerrado</option>
+                    <option value="cancelado">Cancelado</option>
+                </select>
+                <button type="submit">Buscar</button>
+            </form>
+            <div id="messageConsulta" role="alert" aria-live="polite"></div>
+            <ul id="publicProjectsList"></ul>
+        </section>
+    </div>
+
+    <script src="index.js"></script>
 </body>
 </html>

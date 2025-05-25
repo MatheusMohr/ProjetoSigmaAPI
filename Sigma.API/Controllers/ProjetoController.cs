@@ -9,50 +9,57 @@ namespace Sigma.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProjetoController : ControllerBase
+    public class ProjetosController : ControllerBase
     {
         private readonly IProjetoService _projetoService;
 
-        public ProjetoController(IProjetoService projetoService)
+        public ProjetosController(IProjetoService projetoService)
         {
             _projetoService = projetoService;
         }
 
-        [HttpPost("inserir")]
-        public async Task<IActionResult> Inserir([FromBody] ProjetoNovoDto model)
+        [HttpPost]
+        public async Task<IActionResult> CriarProjeto([FromBody] ProjetoNovoDto model)
         {
-            var result = await _projetoService.Inserir(model);
-            return result ? Ok() : BadRequest();
+            var sucesso = await _projetoService.Inserir(model);
+            return sucesso
+                ? CreatedAtAction(nameof(ObterPorId), new { id = model.Id }, model)
+                : BadRequest("Erro ao criar o projeto.");
         }
 
-        [HttpPut("alterar")]
-        public async Task<IActionResult> Alterar([FromBody] ProjetosDto model)
+
+        [HttpPut("{id:long}")]
+        public async Task<IActionResult> AtualizarProjeto(long id, [FromBody] ProjetosDto model)
         {
+            if (id != model.Id)
+                return BadRequest("ID da URL diferente do ID do corpo da requisição.");
+
             try
             {
-                var result = await _projetoService.Atualizar(model);
-                return result ? Ok() : BadRequest();
+                var sucesso = await _projetoService.Atualizar(model);
+                return sucesso ? Ok() : NotFound("Projeto não encontrado.");
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest($"Erro ao atualizar projeto: {ex.Message}");
             }
         }
 
-        [HttpDelete("excluir/{id:long}")]
-        public async Task<IActionResult> Excluir(long id)
+        [HttpDelete("{id:long}")]
+        public async Task<IActionResult> ExcluirProjeto(long id)
         {
             try
             {
-                var result = await _projetoService.Excluir(id);
-                return result ? Ok() : NotFound();
+                var sucesso = await _projetoService.Excluir(id);
+                return sucesso ? NoContent() : NotFound("Projeto não encontrado ou não pode ser excluído.");
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest($"Erro ao excluir projeto: {ex.Message}");
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("buscar")]
         public async Task<IActionResult> Buscar([FromQuery] string? nome, [FromQuery] StatusProjeto? status)
         {
@@ -60,22 +67,21 @@ namespace Sigma.API.Controllers
             return Ok(projetos);
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> BuscarTodos()
         {
             var projetos = await _projetoService.BuscarTodos();
             return Ok(projetos);
         }
-
+        [AllowAnonymous]
         [HttpGet("{id:long}")]
         public async Task<IActionResult> ObterPorId(long id)
         {
             var projeto = await _projetoService.ObterPorId(id);
-            if (projeto == null)
-                return NotFound("Projeto não encontrado");
-            return Ok(projeto);
+            return projeto == null
+                ? NotFound("Projeto não encontrado.")
+                : Ok(projeto);
         }
     }
-
 }
-

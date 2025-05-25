@@ -1,27 +1,15 @@
 const apiBaseUrl = 'http://localhost:5021/api';
 
-// --- LOGIN ---
-document.getElementById('loginForm')?.addEventListener('submit', async e => {
-    e.preventDefault();
-    const username = e.target.username.value.trim();
-    const password = e.target.password.value.trim();
-
-    try {
-        const res = await fetch(`${apiBaseUrl}/auth/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password }),
-        });
-        if (!res.ok) throw new Error('Usuário ou senha inválidos');
-
-        const data = await res.json();
-        localStorage.setItem('token', data.token);
-        alert('Login realizado com sucesso!');
-        window.location.href = 'projetos.html';
-    } catch (err) {
-        alert(err.message);
-    }
-});
+const statusLabels = {
+    emAnalise: 'Em análise',
+    analiseRealizada: 'Análise realizada',
+    analiseAprovada: 'Análise aprovada',
+    iniciado: 'Iniciado',
+    planejado: 'Planejado',
+    emAndamento: 'Em andamento',
+    encerrado: 'Encerrado',
+    cancelado: 'Cancelado'
+};
 
 // --- LOGOUT ---
 document.getElementById('logoutBtn')?.addEventListener('click', () => {
@@ -48,7 +36,11 @@ async function carregarProjetos() {
 
     try {
         const res = await fetch(url);
-        if (!res.ok) throw new Error('Erro ao buscar projetos');
+        if (!res.ok) {
+            const text = await res.text();
+            throw new Error(text || 'Erro ao buscar projetos');
+        }
+
         const projetos = await res.json();
         renderProjects(projetos);
     } catch (err) {
@@ -85,7 +77,12 @@ function renderProjects(projetos) {
                     method: 'DELETE',
                     headers: { Authorization: 'Bearer ' + token },
                 });
-                if (!res.ok) throw new Error('Erro ao excluir projeto');
+
+                if (!res.ok) {
+                    const text = await res.text();
+                    throw new Error(text || 'Erro ao excluir projeto');
+                }
+
                 alert('Projeto excluído com sucesso!');
                 carregarProjetos();
             } catch (err) {
@@ -211,8 +208,12 @@ async function carregarProjetoParaAlterar(idProjeto) {
             },
         });
 
-        if (!res.ok) throw new Error('Projeto não encontrado.');
-        const proj = await res.json(); 
+        if (!res.ok) {
+            const text = await res.text();
+            throw new Error(text || 'Projeto não encontrado.');
+        }
+
+        const proj = await res.json();
 
         document.getElementById('updateProjectId').value = proj.id;
         document.getElementById('updateProjectNome').value = proj.nome;
@@ -227,7 +228,6 @@ async function carregarProjetoParaAlterar(idProjeto) {
     }
 }
 
-// --- Inicializa a lista de projetos ao carregar a página, se o elemento existir ---
 if (document.getElementById('projectsList')) {
     carregarProjetos();
 }
