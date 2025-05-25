@@ -15,13 +15,13 @@ document.getElementById('loginForm')?.addEventListener('submit', async e => {
 
         if (!res.ok) {
             const text = await res.text();
-            throw new Error(text || 'Usuário ou senha inválidos');
+            throw new Error(text || 'Usuario ou senha invalidos');
         }
 
         const data = await res.json();
         localStorage.setItem('token', data.token);
         alert('Login realizado com sucesso!');
-        window.location.href = 'projetos.html'; // redireciona após login
+        window.location.href = 'projetos.html'; 
     } catch (err) {
         alert(`Erro no login: ${err.message}`);
     }

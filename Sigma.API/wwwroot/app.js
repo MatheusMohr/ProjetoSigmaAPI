@@ -1,15 +1,5 @@
 const apiBaseUrl = 'http://localhost:5021/api';
 
-const statusLabels = {
-    emAnalise: 'Em análise',
-    analiseRealizada: 'Análise realizada',
-    analiseAprovada: 'Análise aprovada',
-    iniciado: 'Iniciado',
-    planejado: 'Planejado',
-    emAndamento: 'Em andamento',
-    encerrado: 'Encerrado',
-    cancelado: 'Cancelado'
-};
 
 // --- LOGOUT ---
 document.getElementById('logoutBtn')?.addEventListener('click', () => {
@@ -25,28 +15,62 @@ document.getElementById('searchForm')?.addEventListener('submit', async e => {
 
 // Função para buscar e renderizar projetos
 async function carregarProjetos() {
-    const id = document.getElementById('searchId')?.value.trim() || '';
-    const nome = document.getElementById('searchNome')?.value.trim() || '';
-    const status = document.getElementById('searchStatus')?.value || '';
-    let url = `${apiBaseUrl}/projeto/buscar?`;
+    const id = document.getElementById('searchId')?.value.trim();
+    const nome = document.getElementById('searchNome')?.value.trim();
+    const status = document.getElementById('searchStatus')?.value;
 
-    if (id) url += `id=${encodeURIComponent(id)}&`;
-    if (nome) url += `nome=${encodeURIComponent(nome)}&`;
-    if (status) url += `status=${encodeURIComponent(status)}`;
+    const token = localStorage.getItem('token'); // caso precise autenticar
 
     try {
-        const res = await fetch(url);
-        if (!res.ok) {
-            const text = await res.text();
-            throw new Error(text || 'Erro ao buscar projetos');
+        let projetos = [];
+
+        if (id) {
+            // Buscar por ID no endpoint específico
+            const res = await fetch(`${apiBaseUrl}/projeto/${encodeURIComponent(id)}`, {
+                headers: token ? { Authorization: 'Bearer ' + token } : {}
+            });
+
+            if (res.ok) {
+                const projeto = await res.json();
+                projetos = [projeto]; // transforma em array para renderizar
+            } else if (res.status === 404) {
+                alert('Projeto nao encontrado com esse ID.');
+                projetos = [];
+            } else {
+                const text = await res.text();
+                throw new Error(text || 'Erro ao buscar projeto por ID');
+            }
+        } else {
+            // Buscar por nome e/ou status
+            let params = [];
+
+            if (nome) params.push(`nome=${encodeURIComponent(nome)}`);
+            if (status) params.push(`status=${encodeURIComponent(status)}`);
+
+            const url = `${apiBaseUrl}/projeto/buscar${params.length ? '?' + params.join('&') : ''}`;
+
+            const res = await fetch(url, {
+                headers: token ? { Authorization: 'Bearer ' + token } : {}
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(text || 'Erro ao buscar projetos');
+            }
+
+            projetos = await res.json();
+
+            if (projetos.length === 0) {
+                alert('Nenhum projeto encontrado com esses filtros.');
+            }
         }
 
-        const projetos = await res.json();
         renderProjects(projetos);
     } catch (err) {
         alert(err.message);
     }
 }
+
 
 // --- RENDERIZA PROJETOS ---
 function renderProjects(projetos) {
@@ -67,10 +91,10 @@ function renderProjects(projetos) {
         btnExcluir.onclick = async () => {
             const token = localStorage.getItem('token');
             if (!token) {
-                alert('Você precisa estar logado para excluir.');
+                alert('Voce precisa estar logado para excluir.');
                 return;
             }
-            if (!confirm(`Confirma exclusão do projeto ${proj.nome}?`)) return;
+            if (!confirm(`Confirma exclusao do projeto ${proj.nome}?`)) return;
 
             try {
                 const res = await fetch(`${apiBaseUrl}/projeto/excluir/${proj.id}`, {
@@ -110,7 +134,7 @@ document.getElementById('addProjectForm')?.addEventListener('submit', async e =>
 
     const token = localStorage.getItem('token');
     if (!token) {
-        alert('Você precisa estar logado para adicionar projetos.');
+        alert('Voce precisa estar logado para adicionar projetos.');
         window.location.href = 'index.html';
         return;
     }
@@ -210,7 +234,7 @@ async function carregarProjetoParaAlterar(idProjeto) {
 
         if (!res.ok) {
             const text = await res.text();
-            throw new Error(text || 'Projeto não encontrado.');
+            throw new Error(text || 'Projeto nao encontrado.');
         }
 
         const proj = await res.json();
