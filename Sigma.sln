@@ -18,6 +18,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Domain", "3 - Domain", "{9AD7A8D8-BA5F-4738-B23E-FA3EA0A21F8C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Application", "2 - Application", "{26D45B6C-C6C8-44AD-8F10-6A1FBE596845}"
+	ProjectSection(SolutionItems) = preProject
+		Sigma.API\Sigma.http = Sigma.API\Sigma.http
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Infra", "4 - Infra", "{9922B6CB-68EA-41AC-AB6B-A413122B6AD2}"
 EndProject

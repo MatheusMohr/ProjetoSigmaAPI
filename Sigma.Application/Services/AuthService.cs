@@ -11,11 +11,10 @@ namespace Sigma.Application.Services
 {
     public class AuthService : IAuthService
     {
-        private const string SecretKey = "chave_super_secreta_com_mais_32_bytes!"; // Mantenha em config seguro
+        private const string SecretKey = "chave_super_secreta_com_mais_32_bytes!";
 
         public async Task<string> Authenticate(LoginDto login)
         {
-            // Validação simples (substituir por banco)
             if (login.Username != "admin" || login.Password != "admin")
                 return null;
 

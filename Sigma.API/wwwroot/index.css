@@ -1,216 +1,189 @@
-﻿/* Reset básico */
-* {
+﻿/* Reset */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 body {
-    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', sans-serif;
     background-color: #f9fafb;
-    color: #2c3e50;
+    color: #1f2937;
     min-height: 100vh;
     display: flex;
-    align-items: center;
     justify-content: center;
-    padding: 40px 20px;
+    align-items: center;
+    padding: 40px 16px;
 }
 
-/* Container principal com duas colunas */
+/* Container principal */
 .main-wrapper {
-    display: flex;
-    max-width: 1100px;
+    max-width: 1200px;
     width: 100%;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    display: flex;
     overflow: hidden;
-    min-height: 520px;
+    min-height: 540px;
+    transition: box-shadow 0.3s ease;
 }
 
-/* Login à esquerda */
+    .main-wrapper:hover {
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    }
+
+/* Login */
 .login-container {
     flex: 1 1 350px;
-    padding: 48px 40px;
-    background-color: #ffffff;
-    border-right: 1px solid #e2e8f0;
+    padding: 56px 48px;
+    background-color: #f8fafc;
+    border-right: 1px solid #e5e7eb;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    user-select: none;
 }
 
     .login-container h1 {
-        font-size: 2rem;
-        font-weight: 700;
+        font-size: 2.4rem;
+        font-weight: 800;
         margin-bottom: 36px;
-        color: #1f2937;
+        color: rgba(0, 0, 0, 0.75);
     }
 
     .login-container form {
         display: flex;
         flex-direction: column;
-        gap: 18px;
+        gap: 20px;
     }
 
     .login-container input[type="text"],
     .login-container input[type="password"] {
-        padding: 14px 16px;
+        padding: 14px 18px;
         font-size: 1rem;
-        border: 1.5px solid #cbd5e1;
-        border-radius: 8px;
-        background-color: #f8fafc;
-        color: #334155;
-        transition: border-color 0.25s ease;
-    }
-
-    .login-container input::placeholder {
-        color: #94a3b8;
-        font-weight: 400;
+        border: 1.5px solid #d1d5db;
+        border-radius: 12px;
+        background-color: #fff;
+        transition: border 0.3s ease, box-shadow 0.3s ease;
     }
 
     .login-container input:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
         outline: none;
-        border-color: #3b82f6;
-        background-color: #fff;
     }
 
     .login-container button {
-        margin-top: 8px;
         padding: 14px 0;
-        background-color: #3b82f6;
+        background: #1e40af;
         border: none;
-        border-radius: 8px;
-        color: #fff;
-        font-weight: 600;
+        border-radius: 12px;
+        color: #f9fafb;
+        font-weight: 700;
         font-size: 1.1rem;
         cursor: pointer;
-        transition: background-color 0.3s ease;
-        user-select: none;
+        transition: background 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 4px 14px rgba(30, 64, 175, 0.3);
     }
 
-        .login-container button:hover,
-        .login-container button:focus {
-            background-color: #2563eb;
-            outline: none;
+        .login-container button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
         }
 
-/* Busca e lista pública à direita */
+/* Área pública */
 .public-search-container {
-    flex: 2 1 650px;
-    padding: 40px 48px;
-    background: #ffffff;
+    flex: 2 1 750px;
+    padding: 56px;
+    background: #fff;
     display: flex;
     flex-direction: column;
-    user-select: none;
 }
 
     .public-search-container h2 {
-        font-weight: 700;
-        color: #1e293b;
-        font-size: 1.75rem;
-        margin-bottom: 28px;
-        user-select: text;
+        font-size: 2rem;
+        font-weight: 800;
+        color: rgba(0, 0, 0, 0.75);
+        margin-bottom: 32px;
     }
 
-/* Formulário de busca */
+/* Formulário */
 #publicSearchForm {
     display: flex;
-    gap: 16px;
-    margin-bottom: 32px;
+    gap: 20px;
     flex-wrap: wrap;
-    align-items: center;
+    margin-bottom: 32px;
 }
 
     #publicSearchForm input[type="text"],
     #publicSearchForm select {
-        flex: 1 1 160px;
-        padding: 12px 14px;
+        flex: 1 1 200px;
+        padding: 14px 16px;
         font-size: 1rem;
         border: 1.5px solid #cbd5e1;
-        border-radius: 8px;
-        background: #f8fafc;
-        color: #475569;
-        font-weight: 500;
-        transition: border-color 0.25s ease;
-        outline-offset: 2px;
-        user-select: text;
-        cursor: text;
+        border-radius: 12px;
+        background-color: #f1f5f9;
+        transition: border 0.3s ease, box-shadow 0.3s ease;
     }
-
-        #publicSearchForm input::placeholder,
-        #publicSearchForm select::placeholder {
-            color: #94a3b8;
-            font-weight: 400;
-        }
 
         #publicSearchForm input:focus,
         #publicSearchForm select:focus {
-            border-color: #3b82f6;
+            border-color: #2563eb;
             background: #fff;
-            box-shadow: 0 0 8px rgba(59,130,246,0.3);
-            color: #1e293b;
-        }
-
-    /* Botão de busca */
-    #publicSearchForm button {
-        padding: 14px 40px;
-        background-color: #2563eb;
-        color: #f9fafb;
-        font-weight: 600;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 1.1rem;
-        transition: background-color 0.3s ease;
-        user-select: none;
-        flex-shrink: 0;
-        font-family: 'Inter', sans-serif;
-    }
-
-        #publicSearchForm button:hover,
-        #publicSearchForm button:focus {
-            background-color: #1e40af;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
             outline: none;
         }
 
-        #publicSearchForm button:active {
-            background-color: #1e3a8a;
+    #publicSearchForm button {
+        padding: 14px 32px;
+        background: #1e40af;
+        color: #fff;
+        font-weight: 700;
+        font-size: 1rem;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 4px 14px rgba(30, 64, 175, 0.3);
+    }
+
+        #publicSearchForm button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
         }
 
-/* Mensagem da consulta */
+/* Mensagem */
 #messageConsulta {
     font-style: italic;
     color: #64748b;
-    font-weight: 500;
-    margin-bottom: 20px;
-    user-select: text;
-    min-height: 20px;
+    font-size: 0.95rem;
+    margin-bottom: 24px;
     text-align: center;
 }
 
-/* Lista de projetos */
+/* Lista */
 #publicProjectsList {
     list-style: none;
-    max-height: 360px;
+    max-height: 300px;
     overflow-y: auto;
-    border-radius: 10px;
-    border: 1.5px solid #cbd5e1;
-    padding: 20px;
-    background: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    user-select: text;
-    font-weight: 600;
-    font-size: 1.1rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    padding: 12px;
+    font-size: 0.95rem;
     color: #334155;
-    line-height: 1.5;
+    transition: box-shadow 0.3s ease;
 }
 
     #publicProjectsList li {
         padding: 10px 12px;
         border-bottom: 1px solid #e2e8f0;
+        border-radius: 6px;
         transition: background-color 0.2s ease;
-        cursor: default;
     }
 
         #publicProjectsList li:last-child {
@@ -218,50 +191,43 @@ body {
         }
 
         #publicProjectsList li:hover {
-            background-color: #e0e7ff;
-            color: #2563eb;
+            background-color: #e0f2fe;
+            color: #1e40af;
         }
 
-    /* Scroll customizado para a lista */
+    /* Scrollbar */
     #publicProjectsList::-webkit-scrollbar {
-        width: 8px;
-    }
-
-    #publicProjectsList::-webkit-scrollbar-track {
-        background: #f1f5f9;
-        border-radius: 8px;
+        width: 6px;
     }
 
     #publicProjectsList::-webkit-scrollbar-thumb {
-        background: #2563eb;
-        border-radius: 8px;
-        box-shadow: inset 0 0 5px #1e40af;
+        background: #a5b4fc;
+        border-radius: 4px;
     }
+
+#publicProjectsList {
+    scrollbar-width: thin;
+    scrollbar-color: #a5b4fc transparent;
+}
 
 /* Responsivo */
 @media (max-width: 900px) {
     .main-wrapper {
         flex-direction: column;
-        min-height: auto;
     }
 
     .login-container,
     .public-search-container {
-        border-right: none;
-        border-radius: 0;
         width: 100%;
-        padding: 32px 24px;
-    }
-
-    .public-search-container {
-        margin-top: 24px;
+        padding: 40px 24px;
+        border: none;
     }
 
     #publicSearchForm {
         flex-direction: column;
     }
 
-        #publicSearchForm input[type="text"],
+        #publicSearchForm input,
         #publicSearchForm select,
         #publicSearchForm button {
             width: 100%;

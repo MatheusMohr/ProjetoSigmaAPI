@@ -1,5 +1,48 @@
 const apiBaseUrl = 'http://localhost:5021/api';
 
+// Enums para mapear valores e labels
+const classificacaoRiscoEnum = {
+    Baixo: "Baixo",
+    Medio: "Medio",
+    Alto: "Alto"
+};
+
+const statusProjetoEnum = {
+    EmAnalise: "Em analise",
+    AnaliseRealizada: "Analise realizada",
+    AnaliseAprovada: "Analise aprovada",
+    Iniciado: "Iniciado",
+    Planejado: "Planejado",
+    EmAndamento: "Em andamento",
+    Encerrado: "Encerrado",
+    Cancelado: "Cancelado"
+};
+
+// --- POPULAR SELECTS DO FORMULARIO DE EDICAO ---
+function popularSelects() {
+    const riscoSelect = document.getElementById('updateProjectClassificacaoRisco');
+    const statusSelect = document.getElementById('updateProjectStatus');
+
+    riscoSelect.innerHTML = '';
+    statusSelect.innerHTML = '';
+
+    Object.entries(classificacaoRiscoEnum).forEach(([value, label]) => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = label;
+        riscoSelect.appendChild(option);
+    });
+
+    Object.entries(statusProjetoEnum).forEach(([value, label]) => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = label;
+        statusSelect.appendChild(option);
+    });
+}
+
+// Chama para popular os selects na inicializacao
+popularSelects();
 
 // --- LOGOUT ---
 document.getElementById('logoutBtn')?.addEventListener('click', () => {
@@ -13,26 +56,25 @@ document.getElementById('searchForm')?.addEventListener('submit', async e => {
     await carregarProjetos();
 });
 
-// Função para buscar e renderizar projetos
+// Funcao para buscar e renderizar projetos
 async function carregarProjetos() {
     const id = document.getElementById('searchId')?.value.trim();
     const nome = document.getElementById('searchNome')?.value.trim();
     const status = document.getElementById('searchStatus')?.value;
 
-    const token = localStorage.getItem('token'); // caso precise autenticar
+    const token = localStorage.getItem('token');
 
     try {
         let projetos = [];
 
         if (id) {
-            // Buscar por ID no endpoint específico
             const res = await fetch(`${apiBaseUrl}/projeto/${encodeURIComponent(id)}`, {
                 headers: token ? { Authorization: 'Bearer ' + token } : {}
             });
 
             if (res.ok) {
                 const projeto = await res.json();
-                projetos = [projeto]; // transforma em array para renderizar
+                projetos = [projeto];
             } else if (res.status === 404) {
                 alert('Projeto nao encontrado com esse ID.');
                 projetos = [];
@@ -41,7 +83,6 @@ async function carregarProjetos() {
                 throw new Error(text || 'Erro ao buscar projeto por ID');
             }
         } else {
-            // Buscar por nome e/ou status
             let params = [];
 
             if (nome) params.push(`nome=${encodeURIComponent(nome)}`);
@@ -71,7 +112,6 @@ async function carregarProjetos() {
     }
 }
 
-
 // --- RENDERIZA PROJETOS ---
 function renderProjects(projetos) {
     const ul = document.getElementById('projectsList');
@@ -83,7 +123,10 @@ function renderProjects(projetos) {
         const dataInicio = new Date(proj.dataInicio).toLocaleString();
         const previsaoTermino = new Date(proj.previsaoTermino).toLocaleString();
 
-        li.textContent = `ID: ${proj.id} | ${proj.nome} - Status: ${proj.status} - Inicio: ${dataInicio} - Previsao Termino: ${previsaoTermino}`;
+        const riscoTexto = classificacaoRiscoEnum[proj.classificacaoRisco] || proj.classificacaoRisco;
+        const statusTexto = statusProjetoEnum[proj.status] || proj.status;
+
+        li.textContent = `ID: ${proj.id} | ${proj.nome} - Status: ${statusTexto} - Risco: ${riscoTexto} - Inicio: ${dataInicio} - Previsao Termino: ${previsaoTermino}`;
 
         const btnExcluir = document.createElement('button');
         btnExcluir.textContent = 'Excluir';
@@ -107,7 +150,7 @@ function renderProjects(projetos) {
                     throw new Error(text || 'Erro ao excluir projeto');
                 }
 
-                alert('Projeto excluído com sucesso!');
+                alert('Projeto excluido com sucesso!');
                 carregarProjetos();
             } catch (err) {
                 alert(err.message);
@@ -177,7 +220,7 @@ document.getElementById('updateProjectForm')?.addEventListener('submit', async e
 
     const token = localStorage.getItem('token');
     if (!token) {
-        alert('Você precisa estar logado para alterar projetos.');
+        alert('Voce precisa estar logado para alterar projetos.');
         window.location.href = 'index.html';
         return;
     }
@@ -216,11 +259,11 @@ document.getElementById('updateProjectForm')?.addEventListener('submit', async e
     }
 });
 
-// --- CARREGAR PROJETO PARA ALTERAÇÃO ---
+// --- CARREGAR PROJETO PARA ALTERACAO ---
 async function carregarProjetoParaAlterar(idProjeto) {
     const token = localStorage.getItem('token');
     if (!token) {
-        alert('Você precisa estar logado.');
+        alert('Voce precisa estar logado.');
         window.location.href = 'index.html';
         return;
     }
@@ -250,8 +293,4 @@ async function carregarProjetoParaAlterar(idProjeto) {
     } catch (err) {
         alert(err.message);
     }
-}
-
-if (document.getElementById('projectsList')) {
-    carregarProjetos();
 }

@@ -1,6 +1,5 @@
 ﻿const apiBaseUrl = 'http://localhost:5021/api';
 
-// --- LOGIN ---
 document.getElementById('loginForm')?.addEventListener('submit', async e => {
     e.preventDefault();
     const username = e.target.username.value.trim();
@@ -27,25 +26,16 @@ document.getElementById('loginForm')?.addEventListener('submit', async e => {
     }
 });
 
-// --- BUSCAR PROJETOS PÚBLICOS ---
 document.getElementById('publicSearchForm')?.addEventListener('submit', async e => {
     e.preventDefault();
     await carregarProjetosPublicos();
 });
 
 async function carregarProjetosPublicos() {
-    const id = document.getElementById('publicSearchId')?.value.trim() || '';
-    const nome = document.getElementById('publicSearchNome')?.value.trim() || '';
-    const status = document.getElementById('publicSearchStatus')?.value || '';
-
-    let url = `${apiBaseUrl}/projeto/buscar?`;
-
-    if (id) url += `id=${encodeURIComponent(id)}&`;
-    if (nome) url += `nome=${encodeURIComponent(nome)}&`;
-    if (status) url += `status=${encodeURIComponent(status)}`;
-
-    // Remove trailing '&' ou '?' se houver
-    url = url.replace(/[&?]$/, '');
+    const idRaw = document.getElementById('publicSearchId')?.value.trim();
+    const id = idRaw || null;
+    const nome = document.getElementById('publicSearchNome')?.value.trim();
+    const status = document.getElementById('publicSearchStatus')?.value;
 
     const ul = document.getElementById('publicProjectsList');
     const msgDiv = document.getElementById('messageConsulta');
@@ -54,32 +44,52 @@ async function carregarProjetosPublicos() {
     msgDiv.textContent = 'Carregando...';
 
     try {
-        const res = await fetch(url);
-        if (!res.ok) {
-            const text = await res.text();
-            throw new Error(text || 'Erro ao buscar projetos');
+        let projetos = [];
+
+        if (id) {
+            const res = await fetch(`${apiBaseUrl}/projeto/${encodeURIComponent(id)}`);
+            if (res.ok) {
+                const projeto = await res.json();
+                projetos = [projeto];
+            } else if (res.status === 404) {
+                msgDiv.textContent = 'Projeto não encontrado com esse ID.';
+                return;
+            } else {
+                const text = await res.text();
+                throw new Error(text || 'Erro ao buscar projeto por ID');
+            }
+        } else {
+            let params = [];
+            if (nome) params.push(`nome=${encodeURIComponent(nome)}`);
+            if (status) params.push(`status=${encodeURIComponent(status)}`);
+
+            const url = `${apiBaseUrl}/projeto/buscar${params.length ? '?' + params.join('&') : ''}`;
+
+            const res = await fetch(url);
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(text || 'Erro ao buscar projetos');
+            }
+
+            projetos = await res.json();
+
+            if (!projetos.length) {
+                msgDiv.textContent = 'Nenhum projeto encontrado.';
+                return;
+            }
         }
 
-        const projetos = await res.json();
-
-        if (!projetos.length) {
-            msgDiv.textContent = 'Nenhum projeto encontrado.';
-            return;
-        }
-
-        msgDiv.textContent = ''; // limpa mensagem
-
+        msgDiv.textContent = '';
         projetos.forEach(proj => {
             const li = document.createElement('li');
 
             const dataInicio = proj.dataInicio ? new Date(proj.dataInicio).toLocaleDateString() : 'N/A';
             const previsaoTermino = proj.previsaoTermino ? new Date(proj.previsaoTermino).toLocaleDateString() : 'N/A';
 
-            li.textContent = `ID: ${proj.id} | ${proj.nome} - Status: ${proj.status || 'Desconhecido'} - Inicio: ${dataInicio} - Previsao: ${previsaoTermino}`;
+            li.textContent = `ID: ${proj.id} | ${proj.nome} - Status: ${proj.status || 'Desconhecido'} - Início: ${dataInicio} - Previsão: ${previsaoTermino}`;
 
             ul.appendChild(li);
         });
-
     } catch (err) {
         msgDiv.textContent = `Erro ao carregar projetos: ${err.message}`;
     }

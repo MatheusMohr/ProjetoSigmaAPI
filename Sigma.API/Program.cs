@@ -22,20 +22,16 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Adiciona contexto do banco (EF)
 builder.Services.AddApplicationContext(configuration.GetValue<string>("ConnectionStrings:Database")!);
 
-// Configuração do AutoMapper
 MapperConfiguration mapperConfiguration = new MapperConfiguration(mapperConfig =>
 {
     mapperConfig.AddMaps(new[] { "Sigma.Application" });
 });
 builder.Services.AddSingleton(mapperConfiguration.CreateMapper());
 
-// Registra os serviços e repositórios da aplicação
 ContainerService.AddApplicationServicesCollentions(builder.Services);
 
-// Configuração do CORS para permitir qualquer origem (ajuste para produção)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins", policy =>
@@ -46,7 +42,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Configuração do JWT - substitua a chave pela sua segura!
 var key = Encoding.ASCII.GetBytes("chave_super_secreta_com_mais_32_bytes!");
 
 builder.Services.AddAuthentication(options =>
@@ -55,7 +50,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-    options.RequireHttpsMetadata = false; // para ambiente de desenvolvimento
+    options.RequireHttpsMetadata = false;
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -76,7 +71,6 @@ if (app.Environment.IsDevelopment())
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-// Use CORS antes da autenticação e autorização
 app.UseCors("AllowAllOrigins");
 
 app.UseAuthentication();
