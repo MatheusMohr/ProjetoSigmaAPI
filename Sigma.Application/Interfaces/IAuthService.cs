@@ -10,5 +10,6 @@ namespace Sigma.Application.Interfaces
     public interface IAuthService
     {
         Task<string> Authenticate(LoginDto login);
+        Task<bool> Register(RegisterDto register);
     }
 }

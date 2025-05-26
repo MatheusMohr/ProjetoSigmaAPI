@@ -26,5 +26,15 @@ namespace Sigma.API.Controllers
 
             return Ok(new { Token = token });
         }
+
+    [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterDto register)
+        {
+            var result = await _authService.Register(register);
+            if (!result)
+                return BadRequest("Usuário já existe.");
+
+            return Ok("Usuário registrado com sucesso.");
+        }
     }
 }
