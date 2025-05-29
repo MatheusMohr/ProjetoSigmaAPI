@@ -48,7 +48,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-var key = Encoding.ASCII.GetBytes("chave_super_secreta_com_mais_32_bytes!");
+var key = Encoding.ASCII.GetBytes("9dF#8wLq2Xz@1vRtCm$5GhYpEj7UkNbQ4ZwS");
 
 builder.Services.AddAuthentication(options =>
 {

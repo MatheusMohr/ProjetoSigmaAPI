@@ -1,6 +1,5 @@
 const apiBaseUrl = 'http://localhost:5021/api';
 
-// Enums para mapear valores e labels
 const classificacaoRiscoEnum = {
     Baixo: "Baixo",
     Medio: "Medio",
@@ -18,7 +17,6 @@ const statusProjetoEnum = {
     Cancelado: "Cancelado"
 };
 
-// --- POPULAR SELECTS DO FORMULARIO DE EDICAO ---
 function popularSelects() {
     const riscoSelect = document.getElementById('updateProjectClassificacaoRisco');
     const statusSelect = document.getElementById('updateProjectStatus');
@@ -41,22 +39,18 @@ function popularSelects() {
     });
 }
 
-// Chama para popular os selects na inicializacao
 popularSelects();
 
-// --- LOGOUT ---
 document.getElementById('logoutBtn')?.addEventListener('click', () => {
     localStorage.removeItem('token');
     window.location.href = 'index.html';
 });
 
-// --- BUSCAR PROJETOS ---
 document.getElementById('searchForm')?.addEventListener('submit', async e => {
     e.preventDefault();
     await carregarProjetos();
 });
 
-// Funcao para buscar e renderizar projetos
 async function carregarProjetos() {
     const id = document.getElementById('searchId')?.value.trim();
     const nome = document.getElementById('searchNome')?.value.trim();
@@ -112,7 +106,6 @@ async function carregarProjetos() {
     }
 }
 
-// --- RENDERIZA PROJETOS ---
 function renderProjects(projetos) {
     const ul = document.getElementById('projectsList');
     ul.innerHTML = '';
@@ -171,7 +164,6 @@ function renderProjects(projetos) {
     });
 }
 
-// --- ADICIONAR PROJETO ---
 document.getElementById('addProjectForm')?.addEventListener('submit', async e => {
     e.preventDefault();
 
@@ -214,7 +206,6 @@ document.getElementById('addProjectForm')?.addEventListener('submit', async e =>
     }
 });
 
-// --- ALTERAR PROJETO ---
 document.getElementById('updateProjectForm')?.addEventListener('submit', async e => {
     e.preventDefault();
 
@@ -259,7 +250,6 @@ document.getElementById('updateProjectForm')?.addEventListener('submit', async e
     }
 });
 
-// --- CARREGAR PROJETO PARA ALTERACAO ---
 async function carregarProjetoParaAlterar(idProjeto) {
     const token = localStorage.getItem('token');
     if (!token) {

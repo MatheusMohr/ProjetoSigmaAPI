@@ -39,10 +39,6 @@ namespace Sigma.Infra.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("datainicio");
 
-                    b.Property<DateTime?>("DataTerminoReal")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("dataterminoreal");
-
                     b.Property<string>("Descricao")
                         .HasColumnType("text")
                         .HasColumnName("descricao");

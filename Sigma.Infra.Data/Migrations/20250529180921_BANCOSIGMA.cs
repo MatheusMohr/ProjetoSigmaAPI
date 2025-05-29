@@ -22,7 +22,6 @@ namespace Sigma.Infra.Data.Migrations
                     descricao = table.Column<string>(type: "text", nullable: true),
                     datainicio = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     previsaotermino = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    dataterminoreal = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     orcamentototal = table.Column<decimal>(type: "numeric", nullable: false),
                     classificacaorisco = table.Column<int>(type: "integer", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false)
@@ -31,6 +30,21 @@ namespace Sigma.Infra.Data.Migrations
                 {
                     table.PrimaryKey("pk_projeto", x => x.id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "usuarios",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    username = table.Column<string>(type: "text", nullable: false),
+                    passwordhash = table.Column<string>(type: "text", nullable: false),
+                    email = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_usuarios", x => x.id);
+                });
         }
 
         /// <inheritdoc />
@@ -38,6 +52,9 @@ namespace Sigma.Infra.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "projeto");
+
+            migrationBuilder.DropTable(
+                name: "usuarios");
         }
     }
 }

@@ -12,8 +12,8 @@ using Sigma.Infra.Data.Context;
 namespace Sigma.Infra.Data.Migrations
 {
     [DbContext(typeof(SigmaContext))]
-    [Migration("20250526223400_bancoRegister")]
-    partial class bancoRegister
+    [Migration("20250529180921_BANCOSIGMA")]
+    partial class BANCOSIGMA
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,10 +41,6 @@ namespace Sigma.Infra.Data.Migrations
                     b.Property<DateTime>("DataInicio")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("datainicio");
-
-                    b.Property<DateTime?>("DataTerminoReal")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("dataterminoreal");
 
                     b.Property<string>("Descricao")
                         .HasColumnType("text")

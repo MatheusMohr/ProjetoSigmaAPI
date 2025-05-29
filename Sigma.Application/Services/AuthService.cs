@@ -14,7 +14,7 @@ namespace Sigma.Application.Services
 {
     public class AuthService : IAuthService
     {
-        private const string SecretKey = "chave_super_secreta_com_mais_32_bytes!";
+        private const string SecretKey = "9dF#8wLq2Xz@1vRtCm$5GhYpEj7UkNbQ4ZwS";
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly PasswordHasher<Usuario> _passwordHasher = new PasswordHasher<Usuario>();
 
